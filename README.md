@@ -1,61 +1,90 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## 🧳 Travel Request API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+API RESTful para gerenciamento de pedidos de viagens corporativas, construída com **Laravel**.
 
-## About Laravel
+## 🚀 Funcionalidades
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Solicitação de viagens por colaboradores
+- Listagem de pedidos com filtros por status, destino e data
+- Aprovação e rejeição de viagens por gestores
+- Cancelamento de viagens aprovadas
+- Autenticação com base no usuário logado
+- Autorização por políticas (Gates)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 📦 Tecnologias Utilizadas
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- [Laravel 12+](https://laravel.com/)
+- [PHP 8.2+](https://www.php.net/)
+- [MySQL](https://www.mysql.com/)
+- [Docker](https://www.docker.com/)
+- PHPUnit (testes automatizados)
 
-## Learning Laravel
+## 📁 Estruturaapp/
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+```
+app/
+├── DTOs/ # Transferência de dados
+├── Events/ # Eventos do sistema
+├── Http/
+│ ├── Controllers/ # Controllers da API
+│ ├── Requests/ # Validações
+│ └── Resources/ # Transformações de resposta
+├── Models/ # Modelos Eloquent
+├── Policies/ # Autorização
+├── Repositories/ # Acesso aos dados
+└── Services/ # Lógica de negócio
+```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## ⚙️ Instalação
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```bash
+git clone https://github.com/seu-usuario/travel-api.git
+cd travel-api
 
-## Laravel Sponsors
+cp .env.example .env
+composer install
+php artisan key:generate
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+# Configure seu banco no .env e rode as migrations
+php artisan migrate --seed
+```
 
-### Premium Partners
+## 🧪 Testes
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Rodar todos os testes:
 
-## Contributing
+```bash
+php artisan test
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 🔐 Autenticação e Autorização
 
-## Code of Conduct
+Utiliza autenticação baseada no usuário logado via Auth::user()
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Regras de autorização são controladas por Policies e Gates para garantir que usuários não aprovem ou cancelem suas
+próprias viagens.
 
-## Security Vulnerabilities
+## 🔁 Fluxo de Aprovação
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+1. Colaborador solicita viagem (POST /api/travels)
 
-## License
+2. Gestor lista pedidos pendentes (GET /api/travels?status=requested)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+3. Gestor aprova/rejeita (PATCH /api/travels/{id}/status)
+
+4. Viagem aprovada pode ser cancelada por outro gestor (PATCH /api/travels/{id}/cancel)
+
+## 📬 Endpoints
+
+
+| Método | Rota                     | Descrição                   |
+| ------ | ------------------------ | --------------------------- |
+| GET    | /api/travels             | Lista viagens (com filtros) |
+| GET    | /api/travels/{id}        | Detalhes da viagem          |
+| POST   | /api/travels             | Criar novo pedido de viagem |
+| PATCH  | /api/travels/{id}/status | Atualiza o status da viagem |
+| PATCH  | /api/travels/{id}/cancel | Cancela uma viagem aprovada |
+
+
+## Postman Collection
+[Corporate Travel Management.postman_collection.json](Corporate%20Travel%20Management.postman_collection.json)
